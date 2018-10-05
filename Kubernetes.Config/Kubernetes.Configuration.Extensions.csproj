@@ -8,6 +8,8 @@
     <FileVersion>0.0.1.0</FileVersion>
     <Description>Adds extension methods for reading Kubernetes Configmaps and Secrets</Description>
     <Authors>Tommy Kindmark</Authors>
+    <PackageTags>Kubernetes</PackageTags>
+    <RepositoryUrl>https://github.com/Towmeykaw/Kubernetes.Configuration.Extensions</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
