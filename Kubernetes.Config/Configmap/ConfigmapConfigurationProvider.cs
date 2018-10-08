@@ -18,7 +18,15 @@ namespace Kubernetes.Configuration.Extensions.Configmap
         {
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
-            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            KubernetesClientConfiguration config;
+            try
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
             _client = new k8s.Kubernetes(config);
 
             if (!reloadOnChange) return;
