@@ -14,7 +14,7 @@ namespace Kubernetes.Configuration.Extensions.Configmap
         private readonly k8s.Kubernetes _client;
         public ConfigmapConfigurationProvider() : this(string.Empty, string.Empty, false)
         { }
-        public ConfigmapConfigurationProvider(string namespaceSelector, string labelSelector, bool reloadOnChange)
+        public ConfigmapConfigurationProvider(string? namespaceSelector, string? labelSelector, bool reloadOnChange)
         {
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
@@ -31,7 +31,8 @@ namespace Kubernetes.Configuration.Extensions.Configmap
 
             if (!reloadOnChange) return;
             var configMapsResponse = _client.ListNamespacedConfigMapWithHttpMessagesAsync(_namespaceSelector, labelSelector: _labelSelector, watch: true).Result;
-            configMapsResponse?.Watch<V1ConfigMap>((type, item) =>
+            
+            configMapsResponse.Watch<V1ConfigMap, V1ConfigMapList>((type, item) =>
             {
                 if(type.Equals(WatchEventType.Modified))
                     Load(true);

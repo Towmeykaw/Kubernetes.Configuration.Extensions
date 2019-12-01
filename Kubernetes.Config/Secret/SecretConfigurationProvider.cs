@@ -17,7 +17,7 @@ namespace Kubernetes.Configuration.Extensions.Secret
 
         public SecretConfigurationProvider() : this(string.Empty, string.Empty, false)
         { }
-        public SecretConfigurationProvider(string namespaceSelector, string labelSelector, bool reloadOnChange, bool decodeData = true)
+        public SecretConfigurationProvider(string? namespaceSelector, string? labelSelector, bool reloadOnChange, bool decodeData = true)
         {
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
@@ -26,8 +26,9 @@ namespace Kubernetes.Configuration.Extensions.Secret
             _client = new k8s.Kubernetes(config);
 
             if (!reloadOnChange) return;
+            
             var secretResponse = _client.ListNamespacedSecretWithHttpMessagesAsync(_namespaceSelector, labelSelector: _labelSelector, watch: true).Result;
-            secretResponse?.Watch<V1Secret>((type, item) =>
+            secretResponse.Watch<V1Secret, V1SecretList>((type, item) =>
             {
                 if(type.Equals(WatchEventType.Modified))
                     Load(true);
@@ -46,9 +47,9 @@ namespace Kubernetes.Configuration.Extensions.Secret
                 var dataList = secrets.Items.Where(w => w.Data != null).Select(s => s.Data);
                 foreach (var dataItem in dataList)
                 {
-                    foreach (var item in dataItem)
+                    foreach (var (key, value) in dataItem)
                     {
-                        Data.Add(item.Key, _decodeData ? DecodeSecret(item.Value) : Encoding.UTF8.GetString(item.Value));
+                        Data.Add(key, _decodeData ? DecodeSecret(value) : Encoding.UTF8.GetString(value));
                     }
                 }
             }
