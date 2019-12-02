@@ -1,0 +1,13 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: KinD (Kubernetes in Docker) Action
+      uses: engineerd/setup-kind@v0.1.0
