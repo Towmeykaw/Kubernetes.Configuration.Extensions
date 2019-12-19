@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: KinD (Kubernetes in Docker) Action
-      uses: engineerd/setup-kind@v0.1.0
+      uses: engineerd/setup-kind@v0.2.0
     - name: Install configmap and secret
       run: |
         kubectl create configmap test-config --from-literal=testkey=testvalue
