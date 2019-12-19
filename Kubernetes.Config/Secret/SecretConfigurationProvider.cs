@@ -22,7 +22,15 @@ namespace Kubernetes.Configuration.Extensions.Secret
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
             _decodeData = decodeData;
-            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            KubernetesClientConfiguration config;
+            try
+            {
+                config = KubernetesClientConfiguration.InClusterConfig();
+            }
+            catch
+            {
+                config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
+            }
             _client = new k8s.Kubernetes(config);
 
             if (!reloadOnChange) return;
@@ -69,9 +77,17 @@ namespace Kubernetes.Configuration.Extensions.Secret
             {
                 throw new ArgumentException("Invalid secret value null", nameof(value));
             }
+
             var base64String = Encoding.UTF8.GetString(value);
-            var bytes = Convert.FromBase64String(base64String);
-            return Encoding.UTF8.GetString(bytes);
+            try
+            {
+                var bytes = Convert.FromBase64String(base64String);
+                return Encoding.UTF8.GetString(bytes);
+            }
+            catch
+            {
+                return base64String;
+            }
         }
     }
 }
