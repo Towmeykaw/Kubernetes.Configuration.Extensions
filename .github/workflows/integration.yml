@@ -1,0 +1,21 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: KinD (Kubernetes in Docker) Action
+      uses: engineerd/setup-kind@v0.2.0
+    - name: Install configmap and secret
+      run: |
+        kubectl create configmap test-config --from-literal=testkey=testvalue
+        kubectl create secret generic test-secret --from-literal=testsecretkey=testsecretvalue  
+        kubectl label configmap test-config app=testapp
+        kubectl label secret test-secret app=testapp  
+    - name: Run integrationtest
+      run: dotnet test --filter Type=IntegrationTest
