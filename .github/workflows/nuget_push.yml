@@ -16,3 +16,4 @@ jobs:
         uses: rohith/publish-nuget@v1
         with:
           nuget_key: ${{secrets.NUGET_API_KEY}}
+          project_dir: Kubernetes.Config
