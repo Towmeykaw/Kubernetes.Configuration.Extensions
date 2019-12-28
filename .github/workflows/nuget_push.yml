@@ -4,16 +4,25 @@ on:
     branches:
       - master
 jobs:
-  publish:
-    name: publish to nuget
+  build:
     runs-on: ubuntu-latest
     steps:
       # Checkout
       - uses: actions/checkout@v2
-     
-      # Publish
-      - name: Publish if version is updated
-        uses: rohith/publish-nuget@v1
-        with:
-          nuget_key: ${{secrets.NUGET_API_KEY}}
-          project_dir: Kubernetes.Config
+      - uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: 3.0.100
+      - name: Build
+        run: dotnet build --configuration Release
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pack
+        run: dotnet pack --configuration Release
+      - name: Push
+        run: dotnet nuget push **/*.nupkg
+              --api-key ${{ secrets.NUGET_API_KEY }}
+              --source https://api.nuget.org/v3/index.json
+              --no-symbols true  
