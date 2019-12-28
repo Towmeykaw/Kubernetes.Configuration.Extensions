@@ -14,11 +14,6 @@ jobs:
           dotnet-version: 3.0.100
       - name: Build
         run: dotnet build --configuration Release
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - name: Push
         run: dotnet nuget push **/*.nupkg
               --api-key ${{ secrets.NUGET_API_KEY }}
