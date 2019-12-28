@@ -1,0 +1,18 @@
+name: Publish to Nuget
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    name: publish to nuget
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2
+     
+      # Publish
+      - name: Publish if version is updated
+        uses: rohith/publish-nuget@v1
+        with:
+          nuget_key: ${{secrets.NUGET_API_KEY}}
