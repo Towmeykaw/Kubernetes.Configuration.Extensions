@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Pack
-        run: dotnet pack --configuration Release
       - name: Push
         run: dotnet nuget push **/*.nupkg
               --api-key ${{ secrets.NUGET_API_KEY }}
