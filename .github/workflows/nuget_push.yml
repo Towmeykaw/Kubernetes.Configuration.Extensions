@@ -15,7 +15,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release
       - name: Push
-        run: dotnet nuget push **/*.nupkg
+        run: dotnet nuget push --skip-duplicate **/*.nupkg
               --api-key ${{ secrets.NUGET_API_KEY }}
               --source https://api.nuget.org/v3/index.json
               --no-symbols true  
