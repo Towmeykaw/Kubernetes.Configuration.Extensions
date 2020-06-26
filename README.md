@@ -1,3 +1,6 @@
+
+![.NET Core](https://github.com/Towmeykaw/Kubernetes.Configuration.Extensions/workflows/.NET%20Core/badge.svg)
+
 # Kubernetes.Configuration.Extensions
 
 Adds extension methods for reading Kubernetes Configmaps and Secrets
