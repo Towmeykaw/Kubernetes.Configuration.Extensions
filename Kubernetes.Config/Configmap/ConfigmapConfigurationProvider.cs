@@ -54,7 +54,7 @@ namespace Kubernetes.Configuration.Extensions.Configmap
                 foreach (var dataItem in dataList)
                 {
                     foreach (var (key, value) in dataItem)
-                        Data.Add(key.Replace(_separator, ":"), value);
+                        Data[key.Replace(_separator, ":")] = value;
                 }
             }
             catch

@@ -59,7 +59,7 @@ namespace Kubernetes.Configuration.Extensions.Secret
                 {
                     foreach (var (key, value) in dataItem)
                     {
-                        Data.Add(key.Replace(_separator, ":"), _decodeData ? DecodeSecret(value) : Encoding.UTF8.GetString(value));
+                        Data[key.Replace(_separator, ":")] = _decodeData ? DecodeSecret(value) : Encoding.UTF8.GetString(value);
                     }
                 }
             }
