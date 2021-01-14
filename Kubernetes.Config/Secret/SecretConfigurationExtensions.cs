@@ -5,7 +5,7 @@ namespace Kubernetes.Configuration.Extensions.Secret
 {
     public static class SecretConfigurationExtensions
     {
-        public static IConfigurationBuilder AddKubernetesSecret(this IConfigurationBuilder builder, string labelSelector, string namespaceSelector = "default", string separator = "__", bool reloadOnChange = false)
+        public static IConfigurationBuilder AddKubernetesSecret(this IConfigurationBuilder builder, string labelSelector, string namespaceSelector = "default", string separator = "__", bool reloadOnChange = false, bool decodeData = true)
         {
             if (builder == null)
             {
@@ -15,7 +15,7 @@ namespace Kubernetes.Configuration.Extensions.Secret
             {
                 throw new ArgumentException("Invalid label selector", nameof(labelSelector));
             }
-            builder.Add(new SecretConfigurationSource { Namespace = namespaceSelector, LabelSelector = labelSelector, Separator = separator, ReloadOnChange = reloadOnChange});
+            builder.Add(new SecretConfigurationSource { Namespace = namespaceSelector, LabelSelector = labelSelector, Separator = separator, ReloadOnChange = reloadOnChange, DecodeData = decodeData});
             return builder;
         }
 
