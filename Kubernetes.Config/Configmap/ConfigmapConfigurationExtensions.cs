@@ -5,7 +5,7 @@ namespace Kubernetes.Configuration.Extensions.Configmap
 {
     public static class ConfigmapConfigurationExtensions
     {   
-        public static IConfigurationBuilder AddKubernetesConfigmap(this IConfigurationBuilder builder, string labelSelector, string namespaceSelector = "default", bool reloadOnChange = false)
+        public static IConfigurationBuilder AddKubernetesConfigmap(this IConfigurationBuilder builder, string labelSelector, string namespaceSelector = "default", bool reloadOnChange = false, string separator = "__")
         {
             if (builder == null)
             {
