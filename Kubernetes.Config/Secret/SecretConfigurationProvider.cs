@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,15 +12,17 @@ namespace Kubernetes.Configuration.Extensions.Secret
     {
         private readonly string _namespaceSelector;
         private readonly string _labelSelector;
+        private readonly string _separator;
         private readonly k8s.Kubernetes _client;
         private readonly bool _decodeData;
 
-        public SecretConfigurationProvider() : this(string.Empty, string.Empty, false)
+        public SecretConfigurationProvider() : this(string.Empty, string.Empty, "__", false)
         { }
-        public SecretConfigurationProvider(string? namespaceSelector, string? labelSelector, bool reloadOnChange, bool decodeData = true)
+        public SecretConfigurationProvider(string? namespaceSelector, string? labelSelector, string? separator, bool reloadOnChange, bool decodeData = true)
         {
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
+            _separator = separator ?? "__";
             _decodeData = decodeData;
             KubernetesClientConfiguration config;
             try
@@ -57,7 +59,7 @@ namespace Kubernetes.Configuration.Extensions.Secret
                 {
                     foreach (var (key, value) in dataItem)
                     {
-                        Data.Add(key, _decodeData ? DecodeSecret(value) : Encoding.UTF8.GetString(value));
+                        Data[key.Replace(_separator, ":")] = _decodeData ? DecodeSecret(value) : Encoding.UTF8.GetString(value);
                     }
                 }
             }

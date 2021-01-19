@@ -18,8 +18,8 @@ namespace Kubernetes.Configuration.Extensions.Test
 
             var config = builder.Build();
             Assert.NotEmpty(config.Providers);
-            Assert.Equal("testvalue", config.GetChildren().First().Value);
-            Assert.Equal("testsecretvalue", config.GetChildren().Last().Value);
+            Assert.Equal("testvalue", config.AsEnumerable().Single(x => x.Key == "Test:Config").Value);
+            Assert.Equal("testsecretvalue", config.AsEnumerable().Single(x => x.Key == "Test:Secret").Value);
         }
     }
 }

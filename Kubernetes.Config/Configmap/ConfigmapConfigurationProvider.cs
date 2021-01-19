@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using k8s;
@@ -11,13 +11,15 @@ namespace Kubernetes.Configuration.Extensions.Configmap
     {
         private readonly string _namespaceSelector;
         private readonly string _labelSelector;
+        private readonly string _separator;
         private readonly k8s.Kubernetes _client;
-        public ConfigmapConfigurationProvider() : this(string.Empty, string.Empty, false)
+        public ConfigmapConfigurationProvider() : this(string.Empty, string.Empty, "__", false)
         { }
-        public ConfigmapConfigurationProvider(string? namespaceSelector, string? labelSelector, bool reloadOnChange)
+        public ConfigmapConfigurationProvider(string? namespaceSelector, string? labelSelector, string? separator, bool reloadOnChange)
         {
             _namespaceSelector = namespaceSelector ?? string.Empty;
             _labelSelector = labelSelector ?? string.Empty;
+            _separator = separator ?? "__";
             KubernetesClientConfiguration config;
             try
             {
@@ -51,8 +53,8 @@ namespace Kubernetes.Configuration.Extensions.Configmap
                 var dataList = configMaps.Items.Where(w => w.Data != null).Select(s => s.Data);
                 foreach (var dataItem in dataList)
                 {
-                    foreach (var item in dataItem)
-                        Data.Add(item.Key, item.Value);
+                    foreach (var (key, value) in dataItem)
+                        Data[key.Replace(_separator, ":")] = value;
                 }
             }
             catch
